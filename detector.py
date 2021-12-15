@@ -44,13 +44,14 @@ class Dectector:
                 self.frame = copy.deepcopy(self.__curFrame)
             self.camFPS = 1 / (time.time() - lst_clk + 1e-7)
 
-    def process(self,img,zoom=1,thres = 20):
+    def process(self, zoom=1, thres = 20):
+
         while not self.exitFlag:
-            vedio = cv2.VideoCapture(0)
-            img = vedio.read()
+            # vedio = cv2.VideoCapture(0)
+            # img = vedio.read()
             a=Circles(debug = False)
-            _, img = vedio.read()
-            location = a.center(img,zoom,thres)
+            img = self.frame
+            self.location = a.center(img,zoom,thres)
             # # Exit if ESC pressed
             k = cv2.waitKey(1) & 0xff
             if k == 27: break
@@ -65,7 +66,7 @@ class Dectector:
             self.camThread.start()
 
             time.sleep(2)
-            self.GetThres()
+            
 
             self.procThread = multThread(self.process)
             self.procThread.start()
@@ -79,3 +80,12 @@ class Dectector:
         self.exitFlag = True
         self.camThread.join()
 
+if __name__ == '__main__': 
+    exitFlag = False
+    detector = Dectector()
+    detector.ListenerBegin()
+    
+    while True:
+        location = detector.GetLocation()
+        print(location)
+        time.sleep(0.1)
