@@ -1,9 +1,9 @@
 import numpy as np
 import cv2
 class Circles:
-    def __init__(self, DEBUG = False):
-        self.debug = DEBUG
-    def center(self,img,zoom=1,thres = 20):
+    def __init__(self, debug = False):
+        self.debug = debug
+    def center(self,img,zoom=3,thres = 3):
         height, width = img.shape[:2]
         output = cv2.resize(img, (0, 0), fx=zoom, fy=zoom)
         image = cv2.resize(img, (0, 0), fx=zoom, fy=zoom)
