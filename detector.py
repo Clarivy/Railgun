@@ -89,4 +89,8 @@ if __name__ == '__main__':
     while True:
         location = detector.GetLocation()
         print(location)
+<<<<<<< HEAD
         time.sleep(0.1)
+=======
+        time.sleep(0.1)
+>>>>>>> c5632c2eb45684deae7b63a29644b42f5281a02e
