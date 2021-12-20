@@ -21,7 +21,7 @@ class multThread(threading.Thread):
 
 class Detector:
     
-    def __init__(self, id = 0):
+    def __init__(self, id = 0, flip = True, debug = True):
         self.cam = cv2.VideoCapture(id)
         if not self.cam.isOpened():
             raise Exception("Cannot Open camera in " + str(id))
@@ -30,6 +30,8 @@ class Detector:
         self.exitFlag = False
         self.lock = threading.Lock()
         self.crossCount = 0
+        self.flip = flip
+        self.debug = debug
 
     def UpdateFrame(self):
         lst_clk = 0
@@ -37,20 +39,24 @@ class Detector:
         while not self.exitFlag:
             lst_clk = time.time()
             suc, self.__curFrame = self.cam.read()
+            if self.flip:
+                self.__curFrame = cv2.flip(self.__curFrame, -1)
             if not suc:
                 print("Cannot read frame")
                 continue
             with self.lock:
                 self.frame = copy.deepcopy(self.__curFrame)
-            self.camFPS = 1 / (time.time() - lst_clk + 1e-7)
+            self.camFPS = 1 / (time.time() - lst_clk)
+            if self.debug:
+                print("FPS: " + str(self.camFPS))
 
-    def process(self, zoom=2, thres = 5):
+    def process(self, zoom=1, thres = 25):
         self.location = None
         count = 0
         while not self.exitFlag:
             # vedio = cv2.VideoCapture(0)
             # img = vedio.read()
-            a=Circles(debug = False)
+            a=Circles(debug = self.debug)
             img = self.frame
             loc = a.center(img,zoom,thres)
             if loc != None:

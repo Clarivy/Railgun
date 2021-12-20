@@ -22,6 +22,10 @@ class Circles:
                     cv2.imshow("output", output)
                 return ((-(width // 2 - x // zoom), height // 2 - y // zoom))
             else:
+                if self.debug:
+                    cv2.imshow("output", output)
                 return None
         else:
+            if self.debug:
+                cv2.imshow("output", output)
             return None

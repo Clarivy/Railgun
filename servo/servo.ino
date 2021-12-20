@@ -1,11 +1,11 @@
 #include "Arduino.h"
 #include <Servo.h>
 
-#define UNITS int
+#define UNITS double
 
 const UNITS INIT_ANGLE = 90;
 const UNITS GIANT_STEP = 5;
-const UNITS SMALL_STEP = 1;
+const UNITS SMALL_STEP = 0.5;
 const int READ_DELAY = 10;
 
 Servo servo[2];
