@@ -44,21 +44,25 @@ class Detector:
                 self.frame = copy.deepcopy(self.__curFrame)
             self.camFPS = 1 / (time.time() - lst_clk + 1e-7)
 
-    def process(self, zoom=1, thres = 20):
-
+    def process(self, zoom=2, thres = 5):
+        self.location = None
         while not self.exitFlag:
             # vedio = cv2.VideoCapture(0)
             # img = vedio.read()
             a=Circles(debug = False)
             img = self.frame
-            self.location = a.center(img,zoom,thres)
+            loc = a.center(img,zoom,thres)
+            if loc != None:
+                self.location = loc
+            # location_all = np.zeros(shape=(5,2))
+            # for i in range(5):
+            #     if self.location != None:
+            #         location_all[i] = (self.location)
+            
             # # Exit if ESC pressed
             k = cv2.waitKey(1) & 0xff
             if k == 27: break
 
-
-    def GetLocation(self):
-        return self.location
     
     def ListenerBegin(self):
         try:
@@ -75,15 +79,19 @@ class Detector:
         except:
             print ("Error0: Cannot start update frame thread")
 
-
     def ListenerEnd(self):
         self.exitFlag = True
         self.camThread.join()
         self.procThread.join()
+        
+
+    def GetLocation(self):
+        return self.location  
+
 
 if __name__ == '__main__': 
     exitFlag = False
-    detector = Dectector()
+    detector = Detector()
     detector.ListenerBegin()
     
     while True:
