@@ -57,10 +57,9 @@ class Detector:
                 self.location = loc
                 count = 0
             else:
-                count += 0
-                self.location = loc
-                if count >= 15:
-                    loc = None
+                count += 1
+                if count >= 30:
+                    self.location = None
                     count = 0
             # location_all = np.zeros(shape=(5,2))
             # for i in range(5):
