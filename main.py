@@ -13,10 +13,11 @@ try:
 		loc = dect.GetLocation()
 		print(loc)
 		if loc:
-			if loc[0] < 0:
-				comm.write("l")
-			else:
-				comm.write("r")
+			if abs(loc[0]) >= 5:
+				if loc[0] < 0:
+					comm.write("l")
+				else:
+					comm.write("r")
 		else:
 			comm.write("c")
 		time.sleep(0.2)
