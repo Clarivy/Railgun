@@ -46,6 +46,7 @@ class Detector:
 
     def process(self, zoom=2, thres = 5):
         self.location = None
+        count = 0
         while not self.exitFlag:
             # vedio = cv2.VideoCapture(0)
             # img = vedio.read()
@@ -54,6 +55,13 @@ class Detector:
             loc = a.center(img,zoom,thres)
             if loc != None:
                 self.location = loc
+                count = 0
+            else:
+                count += 0
+                self.location = loc
+                if count >= 15:
+                    loc = None
+                    count = 0
             # location_all = np.zeros(shape=(5,2))
             # for i in range(5):
             #     if self.location != None:
