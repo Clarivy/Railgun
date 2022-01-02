@@ -12,14 +12,36 @@ Servo servo[2];
 UNITS currentAngle[2];
 UNITS cruiseStep = GIANT_STEP;
 
+int in1 = 2, in2 = 3;
+
+void setPos() {
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+}
+
+void setNeg() {
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+}
+
+void setZero() {
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+}
+
 void setup() {
   servo[0].attach(A0);
   servo[1].attach(A1);
-  Serial.begin(9600);
+  
   for(int i = 0; i < 2; ++i) {
     servo[i].write(INIT_ANGLE);
     currentAngle[i] = INIT_ANGLE;
   }
+  
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  
+  Serial.begin(9600);
 }
 
 UNITS safeNum(UNITS x) {
@@ -31,7 +53,6 @@ UNITS safeNum(UNITS x) {
 void loop() {
   if (Serial.available()) {
     char ch = Serial.read();
-    Serial.println(ch);
     UNITS lastAngle[2];
     for(int i = 0; i < 2; ++i) {
       lastAngle[i] = currentAngle[i];
@@ -39,35 +60,44 @@ void loop() {
     if(ch == 'r') {
       currentAngle[0] = safeNum(currentAngle[0] + SMALL_STEP);
     }
-    if(ch == 'l') {
+    else if(ch == 'l') {
       currentAngle[0] = safeNum(currentAngle[0] - SMALL_STEP);
     }
-    if(ch == 'R') {
+    else if(ch == 'R') {
       currentAngle[0] = safeNum(currentAngle[0] + GIANT_STEP);
     }
-    if(ch == 'L') {
+    else if(ch == 'L') {
       currentAngle[0] = safeNum(currentAngle[0] - GIANT_STEP);
     }
-    if(ch == 'u') {
+    else if(ch == 'u') {
       currentAngle[1] = safeNum(currentAngle[1] + SMALL_STEP);
     }
-    if(ch == 'd') {
+    else if(ch == 'd') {
       currentAngle[1] = safeNum(currentAngle[1] - SMALL_STEP);
     }
-    if(ch == 'U') {
+    else if(ch == 'U') {
       currentAngle[1] = safeNum(currentAngle[1] + GIANT_STEP);
     }
-    if(ch == 'D') {
+    else if(ch == 'D') {
       currentAngle[1] = safeNum(currentAngle[1] - GIANT_STEP);
     }
-    if(ch == 'o') {
+    else if(ch == 'o') {
       currentAngle[0] = currentAngle[1] = INIT_ANGLE;
     }
-    if(ch == 'c') {
+    else if(ch == 'c') {
       currentAngle[0] = safeNum(currentAngle[0] + cruiseStep);
       if(currentAngle[0] == 0 || currentAngle[0] == 180) {
         cruiseStep = -cruiseStep;
       }
+    }
+    else if(ch == 'f') {
+      setPos();
+    }
+    else if(ch == 'b') {
+      setNeg();
+    }
+    else if(ch == 's') {
+      setZero();
     }
 
     for(int i = 0; i < 2; ++i) {
