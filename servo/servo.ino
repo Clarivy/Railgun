@@ -3,16 +3,19 @@
 
 #define UNITS double
 
-const UNITS INIT_ANGLE = 90;
+const UNITS INIT_ANGLE = 94;
 const UNITS GIANT_STEP = 5;
 const UNITS SMALL_STEP = 0.5;
 const int READ_DELAY = 10;
+const UNITS STT_ANGLE = 40;
+const UNITS END_ANGLE = 140;
 
 Servo servo[2];
 UNITS currentAngle[2];
 UNITS cruiseStep = GIANT_STEP;
 
-int in1 = 2, in2 = 3;
+int in1 = 2, in2 = 3, in3 = 4, in4 = 5;
+int shootLevel = 1;
 
 void setPos() {
   digitalWrite(in1, HIGH);
@@ -29,6 +32,22 @@ void setZero() {
   digitalWrite(in2, LOW);
 }
 
+void setOpen() {
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+}
+
+void setClose() {
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+}
+
+void charge() {
+  setOpen();
+  delay(500 * shootLevel);
+  setClose();
+}
+
 void setup() {
   servo[0].attach(A0);
   servo[1].attach(A1);
@@ -40,13 +59,15 @@ void setup() {
   
   pinMode(in1, OUTPUT);
   pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
   
   Serial.begin(9600);
 }
 
 UNITS safeNum(UNITS x) {
-  if(x < 0) return 0;
-  if(x > 180) return 180;
+  if(x < STT_ANGLE) return STT_ANGLE;
+  if(x > END_ANGLE) return END_ANGLE;
   return x;
 }
 
@@ -86,7 +107,7 @@ void loop() {
     }
     else if(ch == 'p') {
       currentAngle[0] = safeNum(currentAngle[0] + cruiseStep);
-      if(currentAngle[0] == 0 || currentAngle[0] == 180) {
+      if(currentAngle[0] == STT_ANGLE || currentAngle[0] == END_ANGLE) {
         cruiseStep = -cruiseStep;
       }
     }
@@ -98,6 +119,12 @@ void loop() {
     }
     else if(ch == 's') {
       setZero();
+    }
+    else if(ch == 'c') {
+      charge();
+    }
+    else if(ch >= '1' && ch <= '5') {
+      shootLevel = ch - '0';
     }
 
     for(int i = 0; i < 2; ++i) {

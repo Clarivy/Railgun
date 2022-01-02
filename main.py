@@ -21,6 +21,11 @@ try:
                     comm.write("l")
                 else:
                     comm.write("r")
+            elif abs(loc[1]) >= 15:
+                if loc[1] < 0:
+                    comm.write("d")
+                else:
+                    comm.write("u")
             else:#lock on
                 print("press charge time")
                 while True:
@@ -29,6 +34,11 @@ try:
                         chargetime = key
                         comm.write(chargetime)
                         time.sleep(0.5)
+                    elif key == 'r':
+                        comm.write('b')
+                        time.sleep(5)
+                        comm.write('f')
+                        time.sleep(5)
                     elif key == 'f':
                         comm.write('f')
                         charge = False

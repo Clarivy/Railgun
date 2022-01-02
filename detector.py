@@ -21,7 +21,7 @@ class multThread(threading.Thread):
 
 class Detector:
     
-    def __init__(self, id = 0, flip = True, debug = True):
+    def __init__(self, id = 0, flip = True, debug = True, xBias = 0, yBias = 50):
         self.cam = cv2.VideoCapture(id)
         if not self.cam.isOpened():
             raise Exception("Cannot Open camera in " + str(id))
@@ -32,6 +32,8 @@ class Detector:
         self.crossCount = 0
         self.flip = flip
         self.debug = debug
+        self.yBias = yBias
+        self.xBias = xBias
 
     def UpdateFrame(self):
         lst_clk = 0
@@ -60,7 +62,7 @@ class Detector:
             img = self.frame
             loc = a.center(img,zoom,thres)
             if loc != None:
-                self.location = loc
+                self.location = (self.xBias + loc[0], self.yBias + loc[1])
                 count = 0
             else:
                 count += 1
