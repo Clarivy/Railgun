@@ -84,7 +84,7 @@ void loop() {
     else if(ch == 'o') {
       currentAngle[0] = currentAngle[1] = INIT_ANGLE;
     }
-    else if(ch == 'c') {
+    else if(ch == 'p') {
       currentAngle[0] = safeNum(currentAngle[0] + cruiseStep);
       if(currentAngle[0] == 0 || currentAngle[0] == 180) {
         cruiseStep = -cruiseStep;
