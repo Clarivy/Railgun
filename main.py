@@ -1,5 +1,5 @@
 from re import T
-from debug_comm import Comm
+from communicator import Comm
 from detector import Detector
 import time
 import keyboard
