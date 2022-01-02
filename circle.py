@@ -54,7 +54,7 @@ class Circles:
                     cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
                     cv2.imshow("output", output)
                 if hsv[0] < 110 and hsv[0] > 75:
-                    return ((-(width // 2 - x // zoom), height // 2 - y // zoom),hsv)
+                    return ((-(width // 2 - x // zoom), height // 2 - y // zoom))
                 else:
                     return None
             else:
