@@ -32,38 +32,43 @@ class Circles:
         return H, S, V
     def center(self,img,zoom=1,thres = 3):
         height, width = img.shape[:2]
-        image = cv2.resize(img, (0, 0), fx=zoom, fy=zoom, interpolation = cv2.INTER_NEAREST)
-        output = copy.deepcopy(image)
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        image = img
+        gray = cv2.resize(gray, (0, 0), fx=zoom, fy=zoom)
         circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, 1)
         if circles is not None:
             if circles.shape[1] > thres:
                 circles = np.median(circles,axis=0)
                 circles = np.round(circles[0, :]).astype("int")
                 x, y, r = circles
+                x = int(x // zoom)
+                y = int(y // zoom)
+                r = int(r // zoom)
 
-                #check = image[ max(y - 20,1):min((y + 20),height*zoom) ,max(x - 20,1):min((x + 20),width*zoom) , :]
-                #hsv=[]
-                #for i in range(10):
-                #    for j in range(10):
-                #        hsv.append(self.rgb2hsv(check[i,j,0],check[i,j,1],check[i,j,2]))
-                #hsv = np.mean(np.array(hsv),axis = 0)       
+                check = image[ max(y - 20,1):min(y + 20, height) ,max(x - 20,1):min(x + 20,width) , :]
+                hsv=[]
+                for i in range(10):
+                    for j in range(10):
+                        hsv.append(self.rgb2hsv(check[i,j,0],check[i,j,1],check[i,j,2]))
+                hsv = np.mean(np.array(hsv),axis = 0)       
                 if self.debug:
+                    output = copy.deepcopy(image)
                     cv2.circle(output, (x, y), r, (0, 255, 0), 4)
-                    cv2.putText(output, str((-(width//2 - x // zoom), height//2 - y // zoom)), (100, 50), cv2.FONT_HERSHEY_SIMPLEX,
+                    cv2.putText(output, str((-(width // 2 - x), height // 2 - y)), (100, 50), cv2.FONT_HERSHEY_SIMPLEX,
                                 0.75, (0, 0, 225), 2)
                     cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
                     cv2.imshow("output", output)
-                #if hsv[0] < 110 and hsv[0] > 75:
-                return ((-(width // 2 - x // zoom), height // 2 - y // zoom))
-                #else:
-                #    return None
+                print(hsv)
+                if hsv[0] < 110 and hsv[0] > 70:
+                    return ((-(width // 2 - x), height // 2 - y))
+                else:
+                    return None
             else:
                 if self.debug:
-                    cv2.imshow("output", output)
+                    cv2.imshow("output", image)
                 return None
         else:
             if self.debug:
-                cv2.imshow("output", output)
+                cv2.imshow("output", image)
             return None
 

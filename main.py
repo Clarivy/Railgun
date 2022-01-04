@@ -7,14 +7,14 @@ import keyboard
 chargetime = 1
 charge = False
 comm = Comm()
-dect = Detector(debug = False, flip = False)
+dect = Detector(debug = True, flip = False, yBias = 0, printFPS = False)
 
 dect.ListenerBegin()
 try:
     comm.write("o")
     while True:
         loc = dect.GetLocation()
-        print(loc)
+        print("Location: ", loc)
         if loc:
             if abs(loc[0]) >= 15:
                 #comm.write("O")
@@ -55,7 +55,7 @@ try:
                         print(f"press 1 to 5 to set charge time\npress c to charge\npress f to fire\npress q to quit")                    
         else:
             comm.write("p")
-        time.sleep(0.4)
+        time.sleep(0.3)
 finally:
     dect.ListenerEnd()
     comm.write("o")

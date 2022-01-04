@@ -21,7 +21,7 @@ class multThread(threading.Thread):
 
 class Detector:
     
-    def __init__(self, id = 0, flip = True, debug = True, xBias = 0, yBias = 50):
+    def __init__(self, id = 0, flip = True, debug = True, xBias = 0, yBias = 0, printFPS = True):
         self.cam = cv2.VideoCapture(id)
         if not self.cam.isOpened():
             raise Exception("Cannot Open camera in " + str(id))
@@ -34,6 +34,7 @@ class Detector:
         self.debug = debug
         self.yBias = yBias
         self.xBias = xBias
+        self.printFPS = printFPS
 
     def UpdateFrame(self):
         lst_clk = 0
@@ -49,13 +50,15 @@ class Detector:
             with self.lock:
                 self.frame = copy.deepcopy(self.__curFrame)
             self.camFPS = 1 / (time.time() - lst_clk)
-            if self.debug:
-                print("FPS: " + str(self.camFPS))
+            #if self.debug:
+            #    print("FPS: " + str(self.camFPS))
 
-    def process(self, zoom=2, thres = 25):
+    def process(self, zoom=1.5, thres = 25):
         self.location = None
         count = 0
+        lst_clk = 0
         while not self.exitFlag:
+            lst_clk = time.time()
             # vedio = cv2.VideoCapture(0)
             # img = vedio.read()
             a=Circles(debug = self.debug)
@@ -75,6 +78,9 @@ class Detector:
             #         location_all[i] = (self.location)
             
             # # Exit if ESC pressed
+            camFPS = 1 / (time.time() - lst_clk)
+            if self.printFPS == True:
+                print("Process FPS: " + str(camFPS))
             k = cv2.waitKey(1) & 0xff
             if k == 27: break
 
