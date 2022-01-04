@@ -3,8 +3,9 @@
 
 #define UNITS double
 
-const UNITS INIT_ANGLE = 94;
-const UNITS GIANT_STEP = 5;
+const UNITS INIT_ANGLE_UD = 100;
+const UNITS INIT_ANGLE_LR = 90;
+const UNITS GIANT_STEP = 10;
 const UNITS SMALL_STEP = 0.5;
 const int READ_DELAY = 10;
 const UNITS STT_ANGLE = 40;
@@ -52,10 +53,10 @@ void setup() {
   servo[0].attach(A0);
   servo[1].attach(A1);
   
-  for(int i = 0; i < 2; ++i) {
-    servo[i].write(INIT_ANGLE);
-    currentAngle[i] = INIT_ANGLE;
-  }
+  servo[0].write(INIT_ANGLE_LR);
+  currentAngle[0] = INIT_ANGLE_LR;
+  servo[1].write(INIT_ANGLE_UD);
+  currentAngle[1] = INIT_ANGLE_UD;
   
   pinMode(in1, OUTPUT);
   pinMode(in2, OUTPUT);
@@ -102,8 +103,12 @@ void loop() {
     else if(ch == 'D') {
       currentAngle[1] = safeNum(currentAngle[1] - GIANT_STEP);
     }
+    else if(ch == 'O') {
+      currentAngle[1] = INIT_ANGLE_UD;
+    }
     else if(ch == 'o') {
-      currentAngle[0] = currentAngle[1] = INIT_ANGLE;
+      currentAngle[0] = INIT_ANGLE_LR;
+      currentAngle[1] = INIT_ANGLE_UD;
     }
     else if(ch == 'p') {
       currentAngle[0] = safeNum(currentAngle[0] + cruiseStep);

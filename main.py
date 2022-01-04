@@ -17,6 +17,7 @@ try:
         print(loc)
         if loc:
             if abs(loc[0]) >= 15:
+                #comm.write("O")
                 if loc[0] < 0:
                     comm.write("l")
                 else:
@@ -54,6 +55,7 @@ try:
                         print(f"press 1 to 5 to set charge time\npress c to charge\npress f to fire\npress q to quit")                    
         else:
             comm.write("p")
-        time.sleep(0.2)
+        time.sleep(0.4)
 finally:
     dect.ListenerEnd()
+    comm.write("o")
