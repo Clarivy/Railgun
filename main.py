@@ -1,5 +1,5 @@
 from re import T
-from communicator import Comm
+from debug_comm import Comm
 from detector import Detector
 import time
 import keyboard
@@ -7,9 +7,9 @@ import keyboard
 chargetime = 1
 charge = False
 comm = Comm()
-dect = Detector(debug = True, flip = False, yBias = 0, printFPS = False)
+dect = Detector(debug = True, flip = False, yBias = 0, printFPS = True)
 
-dect.ListenerBegin()
+dect.ListenerBegin() 
 try:
     comm.write("o")
     while True:

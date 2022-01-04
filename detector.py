@@ -53,7 +53,7 @@ class Detector:
             #if self.debug:
             #    print("FPS: " + str(self.camFPS))
 
-    def process(self, zoom=1.5, thres = 25):
+    def process(self, zoom=2, thres = 25):
         self.location = None
         count = 0
         lst_clk = 0
