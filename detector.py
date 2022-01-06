@@ -9,7 +9,6 @@ exitFlag = False
 
 class multThread(threading.Thread):
     def __init__(self, func):
-
         threading.Thread.__init__(self)
         self.func = func
 
@@ -21,7 +20,7 @@ class multThread(threading.Thread):
 
 class Detector:
     
-    def __init__(self, id = 0, flip = True, debug = True, xBias = 0, yBias = 0, printFPS = True):
+    def __init__(self, id = 0, flip = True, debug = True, xBias = 0, yBias = 0, printFPS = True, zoom = 1):
         self.cam = cv2.VideoCapture(id)
         if not self.cam.isOpened():
             raise Exception("Cannot Open camera in " + str(id))
@@ -35,7 +34,8 @@ class Detector:
         self.yBias = yBias
         self.xBias = xBias
         self.printFPS = printFPS
-
+        self.zoom = zoom
+        self.circles = Circles(debug=self.debug)
     def UpdateFrame(self):
         lst_clk = 0
         
@@ -49,11 +49,11 @@ class Detector:
                 continue
             with self.lock:
                 self.frame = copy.deepcopy(self.__curFrame)
-            self.camFPS = 1 / (time.time() - lst_clk)
+            self.camFPS = 1 / ((time.time() - lst_clk)+0.01)
             #if self.debug:
             #    print("FPS: " + str(self.camFPS))
 
-    def process(self, zoom=2, thres = 25):
+    def process(self, thres = 25):
         self.location = None
         count = 0
         lst_clk = 0
@@ -61,15 +61,15 @@ class Detector:
             lst_clk = time.time()
             # vedio = cv2.VideoCapture(0)
             # img = vedio.read()
-            a=Circles(debug = self.debug)
+
             img = self.frame
-            loc = a.center(img,zoom,thres)
+            loc = self.circles.center(img,self.zoom,thres)
             if loc != None:
                 self.location = (self.xBias + loc[0], self.yBias + loc[1])
                 count = 0
             else:
                 count += 1
-                if count >= 30:
+                if count >= 15:
                     self.location = None
                     count = 0
             # location_all = np.zeros(shape=(5,2))

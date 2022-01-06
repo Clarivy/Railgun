@@ -7,7 +7,7 @@ import keyboard
 chargetime = 1
 charge = False
 comm = Comm()
-dect = Detector(debug = True, flip = False, yBias = 0, printFPS = True)
+dect = Detector(debug = False, flip = False, yBias = 0, printFPS = True, zoom = 2)
 
 dect.ListenerBegin() 
 try:
@@ -52,7 +52,7 @@ try:
                         comm.write("o")
                         break
                     else:
-                        print(f"press 1 to 5 to set charge time\npress c to charge\npress f to fire\npress q to quit")                    
+                        print(f"LOCKED ON!!!\nREADY TO FIRE")
         else:
             comm.write("p")
         time.sleep(0.3)
