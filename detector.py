@@ -36,6 +36,7 @@ class Detector:
         self.printFPS = printFPS
         self.zoom = zoom
         self.circles = Circles(debug=self.debug)
+
     def UpdateFrame(self):
         lst_clk = 0
         
@@ -53,7 +54,7 @@ class Detector:
             #if self.debug:
             #    print("FPS: " + str(self.camFPS))
 
-    def process(self, thres = 25):
+    def process(self, thres = 15):
         self.location = None
         count = 0
         lst_clk = 0

@@ -1,5 +1,5 @@
 from re import T
-from debug_comm import Comm
+from communicator import Comm
 from detector import Detector
 import time
 import keyboard
@@ -7,7 +7,7 @@ import keyboard
 chargetime = 1
 charge = False
 comm = Comm()
-dect = Detector(debug = False, flip = False, yBias = 0, printFPS = True, zoom = 2)
+dect = Detector(debug = False, flip = False, yBias = 0, printFPS = True, zoom = 3)
 
 dect.ListenerBegin() 
 try:
@@ -16,13 +16,13 @@ try:
         loc = dect.GetLocation()
         print("Location: ", loc)
         if loc:
-            if abs(loc[0]) >= 15:
+            if abs(loc[0]) >= 20:
                 #comm.write("O")
                 if loc[0] < 0:
                     comm.write("l")
                 else:
                     comm.write("r")
-            elif abs(loc[1]) >= 15:
+            elif abs(loc[1]) >= 20:
                 if loc[1] < 0:
                     comm.write("d")
                 else:
@@ -55,7 +55,7 @@ try:
                         print(f"LOCKED ON!!!\nREADY TO FIRE")
         else:
             comm.write("p")
-        time.sleep(0.3)
+        time.sleep(0.5)
 finally:
     dect.ListenerEnd()
     comm.write("o")

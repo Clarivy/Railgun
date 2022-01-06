@@ -34,10 +34,10 @@ class Circles:
         V = v * 255.0
         return H, S, V
     def center(self,img,zoom=1,thres = 3):
+        raw_height, raw_width = img.shape[:2]
         if self.x is not None:
             height, width = img.shape[:2]
             img = copy.copy(img[max(self.y-self.r,0):min(self.y+self.r,height),max(self.x-self.r,0):min(self.x+self.r,width)])
-            print(self.x,self.y,self.r,img.shape)
 
         height, width = img.shape[:2]
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -66,7 +66,7 @@ class Circles:
                                 0.75, (0, 0, 225), 2)
                     cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
                     cv2.imshow("output", output)
-                    print(hsv)
+                    #print(hsv)
                 if hsv[0] < 110 and hsv[0] > 70:
                     if self.x is not None:
                         xold = self.x
@@ -75,13 +75,13 @@ class Circles:
                         self.x = x
                         self.y = y
                         self.r = max(r,50)
-                        x = x + max(xold-rold,0)
+                        x = x + max(xold - rold,0)
                         y = y + max(yold - rold,0)
                     else:
                         self.x = x
                         self.y = y
                         self.r = max(r,50)
-                    return ((-(width // 2 - x), height // 2 - y))
+                    return ((-(raw_width // 2 - x), raw_height // 2 - y))
                 else:
                     self.x = None
                     self.y = None

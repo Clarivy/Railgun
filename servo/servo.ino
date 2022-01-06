@@ -3,13 +3,13 @@
 
 #define UNITS double
 
-const UNITS INIT_ANGLE_UD = 100;
-const UNITS INIT_ANGLE_LR = 90;
-const UNITS GIANT_STEP = 10;
+const UNITS INIT_ANGLE_UD = 105;
+const UNITS INIT_ANGLE_LR = 100;
+const UNITS GIANT_STEP = 5;
 const UNITS SMALL_STEP = 0.5;
 const int READ_DELAY = 10;
-const UNITS STT_ANGLE = 40;
-const UNITS END_ANGLE = 140;
+const UNITS STT_ANGLE = 50;
+const UNITS END_ANGLE = 150;
 
 Servo servo[2];
 UNITS currentAngle[2];
@@ -80,16 +80,16 @@ void loop() {
       lastAngle[i] = currentAngle[i];
     }
     if(ch == 'r') {
-      currentAngle[0] = safeNum(currentAngle[0] + SMALL_STEP);
-    }
-    else if(ch == 'l') {
       currentAngle[0] = safeNum(currentAngle[0] - SMALL_STEP);
     }
+    else if(ch == 'l') {
+      currentAngle[0] = safeNum(currentAngle[0] + SMALL_STEP);
+    }
     else if(ch == 'R') {
-      currentAngle[0] = safeNum(currentAngle[0] + GIANT_STEP);
+      currentAngle[0] = safeNum(currentAngle[0] - GIANT_STEP);
     }
     else if(ch == 'L') {
-      currentAngle[0] = safeNum(currentAngle[0] - GIANT_STEP);
+      currentAngle[0] = safeNum(currentAngle[0] + GIANT_STEP);
     }
     else if(ch == 'u') {
       currentAngle[1] = safeNum(currentAngle[1] + SMALL_STEP);
